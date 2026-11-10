@@ -17,11 +17,18 @@ if (typeof window !== 'undefined') {
  * `scrollLength` px while it reveals, then releases to the next
  * section.
  */
-const LINE_ONE = [
+type JourneyWordStyle = 'italic' | 'bold';
+
+type JourneyWord = {
+  text: string;
+  style: JourneyWordStyle;
+};
+
+const LINE_ONE: JourneyWord[] = [
   { text: 'through', style: 'italic' },
   { text: 'THIS', style: 'bold' },
 ];
-const LINE_TWO = [
+const LINE_TWO: JourneyWord[] = [
   { text: 'JOURNEY', style: 'bold' },
   { text: 'WITH', style: 'bold' },
   { text: 'ME', style: 'bold' },
@@ -32,8 +39,13 @@ export default function JourneyHero({
   pin = true,
   scrollLength = 1800, // increase for a longer "stay" before it lets go
   dimOpacity = 0.12,
+}: {
+  videoSrc?: string;
+  pin?: boolean;
+  scrollLength?: number;
+  dimOpacity?: number;
 }) {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -64,7 +76,7 @@ export default function JourneyHero({
     return () => ctx.revert();
   }, [dimOpacity, pin, scrollLength]);
 
-  const renderWord = (word, i) => (
+  const renderWord = (word: JourneyWord, i: number) => (
     <span
       key={i}
       className="jh-word"
